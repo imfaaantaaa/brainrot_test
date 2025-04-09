@@ -74,6 +74,8 @@
       let respuesta = "";
       let puntuacion = 0;
 
+      const sonidoInicio = new Audio('imagenes_brainrot/bg_music.mp3'); // ← Asegúrate de tener este archivo
+      
       function iniciarJuego() {
         // Ocultar pantalla de inicio
         document.getElementById("pantallaInicio").style.display = "none";
@@ -81,12 +83,16 @@
         document.getElementById("contenidoJuego").style.display = "block";
 
         // Reproducir sonido de inicio
-        const sonidoInicio = new Audio('imagenes_brainrot/bg_music.mp3'); // ← Asegúrate de tener este archivo
+        
         sonidoInicio.play();
 
         // Iniciar la primera pregunta
         randomizar();
       }
+
+      audio.addEventListener('ended', function() {
+        audio.play(); // Reproduce el audio de nuevo
+      });
 
       function randomizar() {
         const opciones = ['Trippi Troppi', 'Crocodilo Bombardiro', 'Tralalero Tralala', 'Bombombini Goosini', 'Lirili Larila',
