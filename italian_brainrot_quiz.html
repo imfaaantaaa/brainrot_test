@@ -1,0 +1,166 @@
+<html>
+  <body>
+    <!-- BOTÓN DE INICIO -->
+    <div class="contenido-normal" id="pantallaInicio">
+      <button onclick="iniciarJuego()" style="font-family: 'Comic Sans MS'; font-size: 20px;">Iniciar juego</button>
+    </div>
+
+    <!-- CONTENIDO DEL JUEGO -->
+    <div id="contenidoJuego" style="display: none;">
+
+      <div class="contenido-normal">
+        <img id="imagen" src="https://www.mdvacationclub.com/wp-content/uploads/2018/12/Placeholder.png" width="200" height="200">
+      </div>    
+
+      <div class="contenido-normal" id="contenedor1">
+        ¿Cuál es este brainrot?
+      </div>
+
+      <div class="contenido-normal">
+          <form class="opciones" id="contenedor1">
+              <label> <input type="radio" name="brainrot" value="Tralalero Tralala"> Tralalero Tralala </label>
+              <label> <input type="radio" name="brainrot" value="Trulimero Trulicina"> Trulimero Trulicina </label>
+              <label> <input type="radio" name="brainrot" value="Trippi Troppi"> Trippi Troppi </label>
+          </form>
+      </div>
+
+      <div class="contenido-normal">
+        <button onclick="entregarRespuesta()" style="font-family: 'Comic Sans MS'; font-size: 20px;">Adivinar</button>
+      </div>
+
+      <div class="contenido-normal" id="puntosTexto">
+        Puntuación: 0
+      </div>
+
+      <div class="contenido-normal" id="resultado" style="display: none">
+        placeholder
+      </div>
+    </div>
+
+    <style>
+      .opciones {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .contenido-normal {
+        display: flex;
+        justify-content: center;
+        font-family: 'Comic Sans MS';
+        color: white;
+        font-size: 20px;
+        text-shadow: 
+          -1px -1px 0 black,  
+           1px -1px 0 black,
+          -1px  1px 0 black,
+           1px  1px 0 black;
+      }
+
+      #imagen {
+        margin-bottom: 25px;
+      }
+
+      #puntosTexto {
+        margin-top: 25px;
+      }
+
+      body {
+        background-image: url("imagenes_brainrot/bg.gif");
+        background-size: cover;
+      }
+    </style>
+
+    <script>
+      let respuesta = "";
+      let puntuacion = 0;
+
+      function iniciarJuego() {
+        // Ocultar pantalla de inicio
+        document.getElementById("pantallaInicio").style.display = "none";
+        // Mostrar juego
+        document.getElementById("contenidoJuego").style.display = "block";
+
+        // Reproducir sonido de inicio
+        const sonidoInicio = new Audio('imagenes_brainrot/bg_music.mp3'); // ← Asegúrate de tener este archivo
+        sonidoInicio.play();
+
+        // Iniciar la primera pregunta
+        randomizar();
+      }
+
+      function randomizar() {
+        const opciones = ['Trippi Troppi', 'Crocodilo Bombardiro', 'Tralalero Tralala', 'Bombombini Goosini', 'Lirili Larila',
+        'Burbaloni Luliloli', 'Capuccino Assassino', 'Brr brr Patapim', 'Trulimero Trulicina', 'La vaca Saturno Saturnita',
+        'Frulli Frulla', 'Chimpanzini Bananini', 'Bobritto bandito'];
+
+        respuesta = opciones[Math.floor(Math.random() * opciones.length)];
+
+        let seleccionados = new Set();
+        seleccionados.add(respuesta);
+
+        while (seleccionados.size < 3) {
+          const opcionAleatoria = opciones[Math.floor(Math.random() * opciones.length)];
+          seleccionados.add(opcionAleatoria);
+        }
+
+        seleccionados = Array.from(seleccionados);
+        seleccionados.sort(() => Math.random() - 0.5);
+
+        const radios = document.querySelectorAll('input[name="brainrot"]');
+        radios.forEach((radio, index) => {
+          const nuevaOpcion = seleccionados[index];
+          radio.value = nuevaOpcion;
+          radio.nextSibling.textContent = nuevaOpcion;
+        });
+
+        const numAleat = opciones.indexOf(respuesta);
+        const imagenes = [
+          "imagenes_brainrot/tripi.webp",
+          "imagenes_brainrot/crocodilo.webp",
+          "imagenes_brainrot/tralalero.webp",
+          "imagenes_brainrot/bombombini.webp",
+          "imagenes_brainrot/lirili.webp",
+          "imagenes_brainrot/burbaloni.webp",
+          "imagenes_brainrot/capuccino.png",
+          "imagenes_brainrot/patapim.webp",
+          "imagenes_brainrot/trulimero.webp",
+          "imagenes_brainrot/vaca.webp",
+          "imagenes_brainrot/frulli.webp",
+          "imagenes_brainrot/bananini.webp",
+          "imagenes_brainrot/bobritto.png"
+        ];
+
+        document.getElementById("imagen").src = imagenes[numAleat];
+      }
+
+      function entregarRespuesta() {
+        const radioSeleccionado = document.querySelector('input[name="brainrot"]:checked');
+        var textoResultado = document.getElementById("resultado");
+
+        if (radioSeleccionado !== null) {
+          textoResultado.style.display = "flex";
+        }
+
+        if (radioSeleccionado && radioSeleccionado.value === respuesta) {
+          puntuacion++;
+          document.getElementById("puntosTexto").textContent = "Puntuación: " + puntuacion;
+          textoResultado.textContent = "Correcto! +1 punto";
+          randomizar();
+          radioSeleccionado.checked = false;
+
+          const sonido = new Audio('imagenes_brainrot/guess.mp3');
+          sonido.play();
+        } else if (radioSeleccionado) {
+          puntuacion--;
+          document.getElementById("puntosTexto").textContent = "Puntuación: " + puntuacion;
+          textoResultado.textContent = "Incorrecto... -1 punto";
+          randomizar();
+          radioSeleccionado.checked = false;
+
+          const sonido = new Audio('imagenes_brainrot/wrong.mp3');
+          sonido.play();
+        }
+      }
+    </script>
+  </body>
+</html>
