@@ -64,18 +64,37 @@
         margin-top: 25px;
       }
 
+      /* Estilo para el video de fondo */
+      video#fondoVideo {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      width: auto;
+      height: 100%;
+      transform: translateX(-50%); /* Centra el video horizontalmente */
+      object-fit: cover; /* Mantiene la relación de aspecto, cubriendo el área disponible */
+      z-index: -1; /* Asegura que el video quede en el fondo */
+    }
+
       body {
-        background-image: url("imagenes_brainrot/bg.gif");
-        background-size: cover;
+        background-color: lightgray; /* Asegura que el fondo sea blanco */
+        margin: 0; /* Elimina márgenes */
+        overflow: hidden; /* Evita desplazamiento cuando el video se estira */
       }
     </style>
+
+    <!-- Video de fondo -->
+    <video id="fondoVideo" autoplay loop muted>
+      <source src="imagenes_brainrot/bg.mp4" type="video/mp4">
+      Tu navegador no soporta la etiqueta de video.
+    </video>
 
     <script>
       let respuesta = "";
       let puntuacion = 0;
 
       const sonidoInicio = new Audio('imagenes_brainrot/bg_music.mp3'); // ← Asegúrate de tener este archivo
-      
+
       function iniciarJuego() {
         // Ocultar pantalla de inicio
         document.getElementById("pantallaInicio").style.display = "none";
@@ -83,7 +102,6 @@
         document.getElementById("contenidoJuego").style.display = "block";
 
         // Reproducir sonido de inicio
-        
         sonidoInicio.play();
 
         // Iniciar la primera pregunta
@@ -154,7 +172,6 @@
           "imagenes_brainrot/abonono.webp",
           "imagenes_brainrot/zibra.webp",
           "imagenes_brainrot/sal.webp"
-          
         ];
 
         document.getElementById("imagen").src = imagenes[numAleat];
